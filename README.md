@@ -24,11 +24,12 @@
 
 ```
 main.cpp              -- 源代码（唯一）
-map.txt               -- 地图数据文件
-buildings.csv         -- 建筑数据（OSM 导出，参考用）
-edges.csv             -- 边数据（OSM 导出，参考用）
-intersections.csv     -- 路口数据（OSM 导出，参考用）
-streets.csv           -- 道路数据（OSM 导出，参考用）
+map.txt               -- 运行时地图数据（程序自动读取）
+data/                 -- 参考数据（OSM 导出，不参与运行）
+  buildings.csv         -- 建筑数据
+  edges.csv             -- 边数据
+  intersections.csv     -- 路口数据
+  streets.csv           -- 道路数据
 .vscode/              -- VS Code 配置
 ```
 
