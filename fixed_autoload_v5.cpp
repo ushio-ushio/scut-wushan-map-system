@@ -1,6 +1,10 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+#ifdef _WIN32
+#  include <windows.h>
+#endif
+
 static const int MAXN = 1000 + 10;
 static const long long INF = (1LL << 60);
 
@@ -203,7 +207,24 @@ static int lcs_len(const string& a, const string& b) {
 }
 
 static int GetBuilding(const string& st) {
-    // 原始逻辑：用 LCS 做模糊匹配，取相似度最大的建筑
+    // 1) 精确匹配（最符合直觉）
+    for (int i = 1; i <= BuildingNum; i++) {
+        if (blg[i].name == st) return i;
+    }
+
+    // 2) 名称子串匹配：输入“土交”也能命中“土交学院”
+    for (int i = 1; i <= BuildingNum; i++) {
+        if (blg[i].name.find(st) != string::npos) return i;
+    }
+
+    // 3) 描述子串匹配：例如地图里建筑名是“4号楼”，但描述里写了“数学学院”
+    for (int i = 1; i <= BuildingNum; i++) {
+        for (const auto& d : blg[i].discribe) {
+            if (d.find(st) != string::npos) return i;
+        }
+    }
+
+    // 4) LCS 模糊匹配兜底
     int best = 1;
     int bestScore = -1;
     for (int i = 1; i <= BuildingNum; i++) {
@@ -212,6 +233,12 @@ static int GetBuilding(const string& st) {
             bestScore = s;
             best = i;
         }
+    }
+
+    // 如果分数很低，提示一下（不打断流程）
+    if (bestScore <= 1) {
+        cerr << "[Warn] Building '" << st << "' not found. Using closest match: '" << blg[best].name
+             << "' (score=" << bestScore << ")\n";
     }
     return best;
 }
@@ -322,6 +349,13 @@ static void Service() {
 int main(int argc, char** argv) {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
+
+#ifdef _WIN32
+    // 让 Windows 控制台用 UTF-8（避免看到“鍔涘惎...”这种乱码）
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
+#endif
+    setlocale(LC_ALL, "");
 
     // 你想要的“程序内部自动读 txt”：这里默认就读当前目录的 map.txt
     // 若找不到 map.txt，我们会明确报错并退出（避免你以为“卡死”，实际上是在等输入）。

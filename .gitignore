@@ -1,0 +1,13 @@
+# 编译产物
+*.exe
+*.out
+*.o
+*.obj
+
+# MSYS2/MinGW 运行时 DLL
+*.dll
+
+# 系统文件
+Thumbs.db
+Desktop.ini
+.DS_Store
